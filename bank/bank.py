@@ -10,63 +10,66 @@ class Bank(object):
     def accounts(self) -> dict[str, BankAccount]:
         return self.__accounts
 
-    def create_account(self, cpf: str) -> BankAccount:
-        self.__validate_cpf(cpf)
+    def create_account(self, id: str) -> BankAccount:
+        self.__validate_cpf(id)
 
-        if cpf in self.__accounts:
-            raise BankException(f"Conta já cadastrada para o CPF {cpf}.")
+        if id in self.__accounts:
+            raise BankException(f"Conta já cadastrada para o CPF/CNPJ {id}.")
 
-        new_account = BankAccount(cpf)
+        new_account = BankAccount(id)
 
-        self.__accounts[cpf] = new_account
+        self.__accounts[id] = new_account
 
         return new_account
 
-    def get_account(self, cpf: str) -> BankAccount:
-        self.__validate_cpf(cpf)
+    def get_account(self, id: str) -> BankAccount:
+        self.__validate_cpf(id)
 
-        if cpf in self.__accounts:
-            return self.__accounts[cpf]
+        if id in self.__accounts:
+            return self.__accounts[id]
 
-        raise BankException(f"Conta não encontrada para o CPF {cpf}.")
+        raise BankException(f"Conta não encontrada para o CPF/CNPJ {id}.")
 
-    def delete_account(self, cpf: str) -> BankAccount:
-        self.__validate_cpf(cpf)
+    def delete_account(self, id: str) -> BankAccount:
+        self.__validate_cpf(id)
 
-        if cpf in self.__accounts:
-            if self.get_account(cpf).balance == 0:
-                return self.__accounts.pop(cpf)
+        if id in self.__accounts:
+            if self.get_account(id).balance == 0:
+                return self.__accounts.pop(id)
 
-            raise BankException(f"Não é possível excluir a conta {cpf} com saldo não zero.")
+            raise BankException(f"Não é possível excluir a conta {id} com saldo não zero.")
 
-        raise BankException(f"Conta não encontrada para o CPF {cpf}.")
+        raise BankException(f"Conta não encontrada para o CPF/CNPJ {id}.")
 
-    def deposit(self, cpf: str, value: float) -> None:
-        account = self.get_account(cpf)
+    def deposit(self, id: str, value: float) -> None:
+        account = self.get_account(id)
         account.deposit(value)
 
-    def withdraw(self, cpf: str, value: float) -> None:
-        account = self.get_account(cpf)
+    def withdraw(self, id: str, value: float) -> None:
+        account = self.get_account(id)
         account.withdraw(value)
 
-    def transfer(self, from_cpf: str, to_cpf: str, value: float) -> None:
-        sender_account = self.get_account(from_cpf)
-        receiver_account = self.get_account(to_cpf)
+    def transfer(self, from_id: str, to_id: str, value: float) -> None:
+        sender_account = self.get_account(from_id)
+        receiver_account = self.get_account(to_id)
 
         sender_account.transfer(receiver_account, value)
 
-    def __validate_cpf(self, cpf) -> None:
-        if not cpf or cpf is None:
-            raise BankException("CPF não pode estar vazio.")
+    def __validate_id(self, id: object, obj: str) -> None:
+        if not id or id is None:
+            raise BankException(f"{obj} não pode estar vazio.")
 
-        if not isinstance(cpf, str):
-            raise TypeError("CPF deve ser uma string.")
+        if not isinstance(id, str):
+            raise TypeError(f"{obj} deve ser uma string.")
+
+        if not id.isdigit():
+            raise ValueError(f"{obj} deve conter apenas dígitos.")
+
+    def __validate_cpf(self, cpf: str) -> None:
+        self.__validate_id(cpf, "CPF")
 
         if len(cpf) != 11:
             raise ValueError("CPF deve ter 11 dígitos.")
-
-        if not cpf.isdigit():
-            raise ValueError("CPF deve conter apenas dígitos.")
 
     def __str__(self) -> str:
         return str(self.accounts)

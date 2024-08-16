@@ -58,7 +58,7 @@ def test_create_account_with_existing_cpf():
     with pytest.raises(BankException) as e:
         bank.create_account("12345678901")
 
-    assert str(e.value) == "Conta já cadastrada para o CPF 12345678901."
+    assert str(e.value) == "Conta já cadastrada para o CPF/CNPJ 12345678901."
 
 
 def test_create_account_with_unique_cpf():

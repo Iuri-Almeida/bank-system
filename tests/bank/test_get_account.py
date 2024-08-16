@@ -12,7 +12,7 @@ def test_get_account_raises_exception_when_cpf_does_not_exist():
     with pytest.raises(BankException) as e:
         bank.get_account(cpf_not_registered)
 
-    assert str(e.value) == f"Conta não encontrada para o CPF {cpf_not_registered}."
+    assert str(e.value) == f"Conta não encontrada para o CPF/CNPJ {cpf_not_registered}."
 
 
 def test_get_account_with_existing_cpf():
@@ -55,18 +55,18 @@ def test_get_account_handles_leading_and_trailing_whitespaces():
 
     with pytest.raises(ValueError) as e1:
         bank.get_account("  " + cpf)
-    
-    assert str(e1.value) == "CPF deve ter 11 dígitos."
+
+    assert str(e1.value) == "CPF deve conter apenas dígitos."
 
     with pytest.raises(ValueError) as e2:
         bank.get_account("  " + cpf + "  ")
-    
-    assert str(e2.value) == "CPF deve ter 11 dígitos."
+
+    assert str(e2.value) == "CPF deve conter apenas dígitos."
 
     with pytest.raises(ValueError) as e3:
         bank.get_account(cpf + "  ")
-    
-    assert str(e3.value) == "CPF deve ter 11 dígitos."
+
+    assert str(e3.value) == "CPF deve conter apenas dígitos."
 
 
 def test_get_account_returns_same_object_for_same_cpf():

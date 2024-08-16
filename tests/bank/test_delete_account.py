@@ -10,7 +10,7 @@ def test_delete_account_non_existent_cpf():
     with pytest.raises(BankException) as context:
         bank.delete_account("12345678901")
 
-    assert str(context.value) == "Conta não encontrada para o CPF 12345678901."
+    assert str(context.value) == "Conta não encontrada para o CPF/CNPJ 12345678901."
 
 
 def test_delete_account_with_nonzero_balance():
