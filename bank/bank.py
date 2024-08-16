@@ -3,8 +3,10 @@ from bank.bank_exception import BankException
 
 
 class Bank(object):
-    def __init__(self):
+    def __init__(self) -> None:
         self.__accounts: dict[str, BankAccount] = {}
+
+        self.__initial_setup()
 
     @property
     def accounts(self) -> dict[str, BankAccount]:
@@ -70,6 +72,9 @@ class Bank(object):
 
         if len(cpf) != 11:
             raise ValueError("CPF deve ter 11 dígitos.")
+
+    def __initial_setup(self):
+        self.create_account("00000000000")
 
     def __str__(self) -> str:
         return str(self.accounts)
