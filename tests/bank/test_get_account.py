@@ -23,7 +23,7 @@ def test_get_account_with_existing_cpf():
     result = bank.get_account(cpf)
 
     assert isinstance(result, BankAccount)
-    assert result.cpf == cpf
+    assert result.id == cpf
 
 
 def test_get_account_with_empty_cpf():

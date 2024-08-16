@@ -73,7 +73,7 @@ class UI(object):
     @staticmethod
     def show_deposit_success(account: BankAccount, value: float) -> None:
         print(f"\nDepósito realizado com sucesso!\n")
-        print(f"CPF: {account.cpf}")
+        print(f"CPF: {account.id}")
         print(f"Conta: {account.account_number}")
         print(f"Valor depositado: R${value:.2f}")
         print(f"Novo saldo: R${account.balance:.2f}")
@@ -83,7 +83,7 @@ class UI(object):
     @staticmethod
     def show_withdraw_success(account: BankAccount, value: float) -> None:
         print(f"\nSaque realizado com sucesso!\n")
-        print(f"CPF: {account.cpf}")
+        print(f"CPF: {account.id}")
         print(f"Conta: {account.account_number}")
         print(f"Valor sacado: R${value:.2f}")
         print(f"Novo saldo: R${account.balance:.2f}")
@@ -93,9 +93,9 @@ class UI(object):
     @staticmethod
     def show_transfer_success(sender_account: BankAccount, receiver_account: BankAccount, value: float) -> None:
         print(f"\nTransferência realizada com sucesso!")
-        print(f"\nCPF de Origem: {sender_account.cpf}")
+        print(f"\nCPF de Origem: {sender_account.id}")
         print(f"Conta de Origem: {sender_account.account_number}")
-        print(f"CPF de Destino: {receiver_account.cpf}")
+        print(f"CPF de Destino: {receiver_account.id}")
         print(f"Conta de Destino: {receiver_account.account_number}")
         print(f"Valor transferido: R${value:.2f}")
         print(f"Novo saldo na Conta de Origem: R${sender_account.balance:.2f}")

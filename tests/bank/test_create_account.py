@@ -65,6 +65,6 @@ def test_create_account_with_unique_cpf():
     bank = Bank()
     new_account = bank.create_account("98765432109")
 
-    assert new_account.cpf == "98765432109"
+    assert new_account.id == "98765432109"
     assert new_account.balance == 0
     assert new_account in bank.accounts.values()

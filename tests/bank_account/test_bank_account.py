@@ -1,8 +1,6 @@
 import pytest
 
 from bank.bank_account import BankAccount
-from bank.bank_exception import BankException
-from bank.transaction_type import TransactionType
 
 
 def test_should_raise_exception_when_creating_bank_account_with_negative_balance():
@@ -17,7 +15,7 @@ def test_should_raise_exception_when_creating_bank_account_with_negative_balance
 def test_str_representation():
     account = BankAccount("12345678901", 1000.0)
 
-    assert str(account) == f"CPF: {account.cpf}\nAgência: {account.agency}\nConta: {account.account_number}\nSaldo: R${account.balance:.2f}"
+    assert str(account) == f"CPF/CNPJ: {account.id}\nAgência: {account.agency}\nConta: {account.account_number}\nSaldo: R${account.balance:.2f}"
 
 
 def test_str_method_large_decimal_places():
@@ -25,7 +23,7 @@ def test_str_method_large_decimal_places():
 
     str_representation = str(account)
 
-    assert str_representation == f"CPF: {account.cpf}\nAgência: {account.agency}\nConta: {account.account_number}\nSaldo: R${account.balance:.2f}"
+    assert str_representation == f"CPF/CNPJ: {account.id}\nAgência: {account.agency}\nConta: {account.account_number}\nSaldo: R${account.balance:.2f}"
 
 
 def test_repr_method():
@@ -33,4 +31,4 @@ def test_repr_method():
 
     repr_representation = repr(account)
 
-    assert repr_representation == f"BankAccount('{account.cpf}', '{account.agency}', '{account.account_number}', {account.balance:.2f})"
+    assert repr_representation == f"BankAccount('{account.id}', '{account.agency}', '{account.account_number}', {account.balance:.2f})"

@@ -9,19 +9,19 @@ from bank.transaction import Transaction
 
 
 class BankAccount(object):
-    def __init__(self, cpf: str, balance: float = 0) -> None:
+    def __init__(self, id: str, balance: float = 0) -> None:
         if balance < 0:
             raise ValueError("O saldo não pode ser negativo.")
 
-        self.__cpf: str = cpf
+        self.__id: str = id
         self.__balance: float = balance
         self.__agency: str = str(randint(1000, 9999))
         self.__account_number: str = str(randint(1000000, 9999999))
         self.__statement: list[Transaction] = []
 
     @property
-    def cpf(self) -> str:
-        return self.__cpf
+    def id(self) -> str:
+        return self.__id
 
     @property
     def balance(self) -> float:
@@ -95,7 +95,7 @@ class BankAccount(object):
             raise BankException("Não é possível transferir para a mesma conta.")
 
     def __str__(self) -> str:
-        return f"CPF: {self.cpf}\nAgência: {self.agency}\nConta: {self.account_number}\nSaldo: R${self.balance:.2f}"
+        return f"CPF/CNPJ: {self.id}\nAgência: {self.agency}\nConta: {self.account_number}\nSaldo: R${self.balance:.2f}"
 
     def __repr__(self) -> str:
-        return f"BankAccount('{self.cpf}', '{self.agency}', '{self.account_number}', {self.balance:.2f})"
+        return f"BankAccount('{self.id}', '{self.agency}', '{self.account_number}', {self.balance:.2f})"

@@ -17,7 +17,7 @@ def test_str_representation_with_accounts():
 
     str_representation = str(bank)
 
-    assert str_representation == "{'" + account1.cpf + "': BankAccount('" + account1.cpf + "', '" + account1.agency + "', '" + account1.account_number + "', " + f"{account1.balance:.2f}" + "), '" + account2.cpf + "': BankAccount('" + account2.cpf + "', '" + account2.agency + "', '" + account2.account_number + "', " + f"{account2.balance:.2f}" + ")}"
+    assert str_representation == "{'" + account1.id + "': BankAccount('" + account1.id + "', '" + account1.agency + "', '" + account1.account_number + "', " + f"{account1.balance:.2f}" + "), '" + account2.id + "': BankAccount('" + account2.id + "', '" + account2.agency + "', '" + account2.account_number + "', " + f"{account2.balance:.2f}" + ")}"
 
 
 def test_str_method_large_decimal_places():
@@ -28,7 +28,7 @@ def test_str_method_large_decimal_places():
 
     str_representation = str(bank)
 
-    assert str_representation == "{'" + account1.cpf + "': BankAccount('" + account1.cpf + "', '" + account1.agency + "', '" + account1.account_number + "', " + f"{account1.balance:.2f}" + ")}"
+    assert str_representation == "{'" + account1.id + "': BankAccount('" + account1.id + "', '" + account1.agency + "', '" + account1.account_number + "', " + f"{account1.balance:.2f}" + ")}"
 
 
 def test_bank_repr_no_accounts():
