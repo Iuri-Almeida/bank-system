@@ -11,7 +11,7 @@ class UI(object):
     @staticmethod
     def show_menu() -> None:
         print("\nBanco do Iuri:")
-        print("1 - Criar Conta")
+        print("1 - Criar Conta (PF ou PJ)")
         print("2 - Depositar")
         print("3 - Sacar")
         print("4 - Transferir")
@@ -34,13 +34,13 @@ class UI(object):
                 print("Opção inválida. Por favor, escolha uma opção entre 1 e 9.")
 
     @staticmethod
-    def read_cpf_value(msg: str) -> str:
+    def read_cpf_or_cnpj_value(msg: str) -> str:
         while True:
             value = input(msg)
-            if len(value) == 11 and value.isdigit():
+            if (len(value) == 11 or len(value) == 14) and value.isdigit():
                 return value
             else:
-                print("CPF inválido. Por favor, digite um CPF válido (11 dígitos).")
+                print("CPF/CNPJ inválido. Por favor, digite um CPF/CNPJ válido (11/14 dígitos).")
 
     @staticmethod
     def read_float_value(msg: str) -> float:
@@ -87,6 +87,7 @@ class UI(object):
         print(f"Conta: {account.account_number}")
         print(f"Valor sacado: R${value:.2f}")
         print(f"Novo saldo: R${account.balance:.2f}")
+        print(f"Taxa: {account.tax:.2%}")
 
         input("\nPressione ENTER para voltar ao menu.")
 
@@ -98,6 +99,7 @@ class UI(object):
         print(f"CPF de Destino: {receiver_account.id}")
         print(f"Conta de Destino: {receiver_account.account_number}")
         print(f"Valor transferido: R${value:.2f}")
+        print(f"Taxa: {sender_account.tax:.2%}")
         print(f"Novo saldo na Conta de Origem: R${sender_account.balance:.2f}")
         print(f"Novo saldo na Conta de Destino: R${receiver_account.balance:.2f}")
 
