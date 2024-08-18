@@ -7,10 +7,19 @@ from bank.bank_exception import BankException
 def test_delete_account_non_existent_cpf():
     bank = Bank()
 
-    with pytest.raises(BankException) as context:
+    with pytest.raises(ValueError) as context:
         bank.delete_account("12345678901")
 
     assert str(context.value) == "Conta não encontrada para o CPF/CNPJ 12345678901."
+
+
+def test_delete_account_non_existent_cnpj():
+    bank = Bank()
+
+    with pytest.raises(ValueError) as context:
+        bank.delete_account("12345678901234")
+
+    assert str(context.value) == "Conta não encontrada para o CPF/CNPJ 12345678901234."
 
 
 def test_delete_account_with_nonzero_balance():
@@ -75,6 +84,3 @@ def test_delete_account_after_multiple_transactions():
     assert deleted_account.id == account1.id
     assert deleted_account.balance == 0
     assert account1.id not in bank.accounts
-
-
-
