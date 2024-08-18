@@ -15,70 +15,70 @@ def main():
             choice = UI.read_menu("\nEscolha: ")
 
             if choice == 1:
-                cpf = UI.read_cpf_value("\nQual o seu cpf? ")
+                id = UI.read_cpf_or_cnpj_value("\nQual o seu CPF/CNPJ? ")
 
-                account = bank.create_account(cpf)
+                account = bank.create_account(id)
 
                 UI.clear_screen()
                 UI.show_account_created(account)
 
             elif choice == 2:
-                cpf = UI.read_cpf_value("\nInforme o CPF da conta que deseja realizar o depósito: ")
+                id = UI.read_cpf_or_cnpj_value("\nInforme o CPF/CNPJ da conta que deseja realizar o depósito: ")
 
                 value = UI.read_float_value("\nQual valor deseja depositar? R$")
 
-                bank.deposit(cpf, value)
+                bank.deposit(id, value)
 
                 UI.clear_screen()
-                UI.show_deposit_success(bank.get_account(cpf), value)
+                UI.show_deposit_success(bank.get_account(id), value)
 
             elif choice == 3:
-                cpf = UI.read_cpf_value("\nInforme o CPF da conta que deseja realizar o saque: ")
+                id = UI.read_cpf_or_cnpj_value("\nInforme o CPF/CNPJ da conta que deseja realizar o saque: ")
 
                 value = UI.read_float_value("\nQual valor deseja sacar? R$")
 
-                bank.withdraw(cpf, value)
+                bank.withdraw(id, value)
 
                 UI.clear_screen()
-                UI.show_withdraw_success(bank.get_account(cpf), value)
+                UI.show_withdraw_success(bank.get_account(id), value)
 
             elif choice == 4:
-                cpf_sender = UI.read_cpf_value("\nInforme o CPF da conta de origem: ")
-                cpf_receiver = UI.read_cpf_value("\nInforme o CPF da conta de destino: ")
+                id_sender = UI.read_cpf_or_cnpj_value("\nInforme o CPF/CNPJ da conta de origem: ")
+                id_receiver = UI.read_cpf_or_cnpj_value("\nInforme o CPF/CNPJ da conta de destino: ")
 
                 value = UI.read_float_value("\nQual valor deseja transferir? R$")
 
-                bank.transfer(cpf_sender, cpf_receiver, value)
+                bank.transfer(id_sender, id_receiver, value)
 
                 UI.clear_screen()
-                UI.show_transfer_success(bank.get_account(cpf_sender), bank.get_account(cpf_receiver), value)
+                UI.show_transfer_success(bank.get_account(id_sender), bank.get_account(id_receiver), value)
 
             elif choice == 5:
                 UI.clear_screen()
                 UI.show_accounts(bank.accounts)
 
             elif choice == 6:
-                cpf = UI.read_cpf_value("\nInforme o CPF da conta que deseja ver os detalhes: ")
+                id = UI.read_cpf_or_cnpj_value("\nInforme o CPF/CNPJ da conta que deseja ver os detalhes: ")
 
                 UI.clear_screen()
-                UI.show_account_info(bank.get_account(cpf))
+                UI.show_account_info(bank.get_account(id))
 
             elif choice == 7:
-                cpf = UI.read_cpf_value("\nInforme o CPF da conta que deseja ver o extrato: ")
+                id = UI.read_cpf_or_cnpj_value("\nInforme o CPF/CNPJ da conta que deseja ver o extrato: ")
 
                 UI.clear_screen()
-                UI.show_account_statement(bank.get_account(cpf))
+                UI.show_account_statement(bank.get_account(id))
 
             elif choice == 8:
-                cpf = UI.read_cpf_value("\nInforme o CPF da conta que deseja excluir: ")
+                id = UI.read_cpf_or_cnpj_value("\nInforme o CPF/CNPJ da conta que deseja excluir: ")
 
                 UI.clear_screen()
-                UI.show_account_deleted(bank.delete_account(cpf))
+                UI.show_account_deleted(bank.delete_account(id))
 
             else:
                 break
 
-        except BankException as e:
+        except (BankException, ValueError) as e:
             print(e)
             input('\nClick ENTER to continue.')
 
