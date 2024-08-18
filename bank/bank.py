@@ -1,5 +1,7 @@
 from bank.bank_account import BankAccount
 from bank.bank_exception import BankException
+from bank.accounts.personal_account import PersonalAccount
+from bank.accounts.legal_entity_account import LegalEntityAccount
 
 
 class Bank(object):
@@ -13,35 +15,35 @@ class Bank(object):
         return self.__accounts
 
     def create_account(self, id: str) -> BankAccount:
-        self.__validate_cpf(id)
+        is_cpf = self.__validate_cpf(id)
+        is_cnpj = self.__validate_cnpj(id)
+
+        if not is_cpf and not is_cnpj:
+            raise ValueError(f"CPF/CNPJ inválido para o valor '{id}'. CPF deve ter 11 dígitos e CNPJ deve ter 14 dígitos.")
 
         if id in self.__accounts:
             raise BankException(f"Conta já cadastrada para o CPF/CNPJ {id}.")
 
-        new_account = BankAccount(id)
+        new_account = PersonalAccount(id) if is_cpf else LegalEntityAccount(id)
 
         self.__accounts[id] = new_account
 
         return new_account
 
     def get_account(self, id: str) -> BankAccount:
-        self.__validate_cpf(id)
-
         if id in self.__accounts:
             return self.__accounts[id]
 
-        raise BankException(f"Conta não encontrada para o CPF/CNPJ {id}.")
+        raise ValueError(f"Conta não encontrada para o CPF/CNPJ {id}.")
 
     def delete_account(self, id: str) -> BankAccount:
-        self.__validate_cpf(id)
-
         if id in self.__accounts:
             if self.get_account(id).balance == 0:
                 return self.__accounts.pop(id)
 
             raise BankException(f"Não é possível excluir a conta {id} com saldo não zero.")
 
-        raise BankException(f"Conta não encontrada para o CPF/CNPJ {id}.")
+        raise ValueError(f"Conta não encontrada para o CPF/CNPJ {id}.")
 
     def deposit(self, id: str, value: float) -> None:
         account = self.get_account(id)
@@ -57,24 +59,29 @@ class Bank(object):
 
         sender_account.transfer(receiver_account, value)
 
-    def __validate_id(self, id: object, obj: str) -> None:
+    def __validate_id(self, id: object) -> None:
         if not id or id is None:
-            raise BankException(f"{obj} não pode estar vazio.")
+            raise BankException(f"CPF/CNPJ não pode estar vazio.")
 
         if not isinstance(id, str):
-            raise TypeError(f"{obj} deve ser uma string.")
+            raise TypeError(f"CPF/CNPJ deve ser uma string.")
 
         if not id.isdigit():
-            raise ValueError(f"{obj} deve conter apenas dígitos.")
+            raise ValueError(f"CPF/CNPJ deve conter apenas dígitos.")
 
-    def __validate_cpf(self, cpf: str) -> None:
-        self.__validate_id(cpf, "CPF")
+    def __validate_cpf(self, cpf: str) -> bool:
+        self.__validate_id(cpf)
 
-        if len(cpf) != 11:
-            raise ValueError("CPF deve ter 11 dígitos.")
+        return len(cpf) == 11
+
+    def __validate_cnpj(self, cnpj: str) -> bool:
+        self.__validate_id(cnpj)
+
+        return len(cnpj) == 14
 
     def __initial_setup(self):
-        self.create_account("00000000000")
+        root_account = PersonalAccount("00000000000", 9999999999)
+        self.__accounts["00000000000"] = root_account
 
     def __str__(self) -> str:
         return str(self.accounts)
