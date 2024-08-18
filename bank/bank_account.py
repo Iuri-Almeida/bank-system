@@ -1,3 +1,4 @@
+from abc import ABC, abstractmethod
 import uuid
 from random import randint
 from datetime import datetime
@@ -8,16 +9,17 @@ from bank.transaction_type import TransactionType
 from bank.transaction import Transaction
 
 
-class BankAccount(object):
+class BankAccount(ABC):
     def __init__(self, id: str, balance: float = 0) -> None:
         if balance < 0:
             raise ValueError("O saldo não pode ser negativo.")
 
         self.__id: str = id
-        self.__balance: float = balance
+        self._balance: float = balance
         self.__agency: str = str(randint(1000, 9999))
         self.__account_number: str = str(randint(1000000, 9999999))
         self.__statement: list[Transaction] = []
+        self.__tax = 0
 
     @property
     def id(self) -> str:
@@ -25,7 +27,7 @@ class BankAccount(object):
 
     @property
     def balance(self) -> float:
-        return self.__balance
+        return self._balance
 
     @property
     def agency(self) -> str:
@@ -39,41 +41,34 @@ class BankAccount(object):
     def statement(self) -> list[Transaction]:
         return self.__statement
 
+    @property
+    def tax(self) -> float:
+        return self.__tax
+
     def deposit(self, value: float) -> None:
-        self.__validate_value(value)
+        self._validate_value(value)
 
-        self.__balance += value
+        self._balance += value
 
-        self.__add_to_statement(TransactionType.DEPOSIT, value, f"Depósito de R${value:.2f} na conta.", datetime.now())
+        self._add_to_statement(TransactionType.DEPOSIT, value, f"Depósito de R${value:.2f} na conta.", datetime.now())
 
+    @abstractmethod
     def withdraw(self, value: float) -> None:
-        self.__validate_value(value)
-        self.__validate_balance(value)
+        pass
 
-        self.__balance -= value
-
-        self.__add_to_statement(TransactionType.WITHDRAW, value, f"Saque de R${value:.2f} da conta.", datetime.now())
-
+    @abstractmethod
     def transfer(self, to_account: Self, value: float) -> None:
-        self.__validate_account(to_account)
-        self.__validate_value(value)
-        self.__validate_balance(value)
+        pass
 
-        self.__balance -= value
+    def _receive_transfer(self, from_account: Self, value: float) -> None:
+        self._balance += value
 
-        to_account.__receive_transfer(self, value)
+        self._add_to_statement(TransactionType.TRANSFER, value, f"Transferência de R${value:.2f} da conta {from_account.account_number}", datetime.now())
 
-        self.__add_to_statement(TransactionType.TRANSFER, value, f"Transferência de R${value:.2f} para a conta {to_account.account_number}", datetime.now())
-
-    def __receive_transfer(self, from_account: Self, value: float) -> None:
-        self.__balance += value
-
-        self.__add_to_statement(TransactionType.TRANSFER, value, f"Transferência de R${value:.2f} da conta {from_account.account_number}", datetime.now())
-
-    def __add_to_statement(self, transaction_type: TransactionType, value: float, description: str, date: datetime) -> None:
+    def _add_to_statement(self, transaction_type: TransactionType, value: float, description: str, date: datetime) -> None:
         self.__statement.append(Transaction(str(uuid.uuid4()), transaction_type, value, description, date))
 
-    def __validate_value(self, value: object) -> None:
+    def _validate_value(self, value: object) -> None:
         if value is None:
             raise BankException("Valor não pode ser vazio.")
 
@@ -86,16 +81,10 @@ class BankAccount(object):
         if value < 0:
             raise ValueError("Valor não pode ser negativo.")
 
-    def __validate_balance(self, value: float) -> None:
-        if value > self.__balance:
+    def _validate_balance(self, value: float) -> None:
+        if value > self._balance:
             raise BankException("Saldo insuficiente. Operação não realizada.")
 
-    def __validate_account(self, account: Self) -> None:
+    def _validate_account(self, account: Self) -> None:
         if account == self:
             raise BankException("Não é possível transferir para a mesma conta.")
-
-    def __str__(self) -> str:
-        return f"CPF/CNPJ: {self.id}\nAgência: {self.agency}\nConta: {self.account_number}\nSaldo: R${self.balance:.2f}"
-
-    def __repr__(self) -> str:
-        return f"BankAccount('{self.id}', '{self.agency}', '{self.account_number}', {self.balance:.2f})"
