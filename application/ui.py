@@ -25,7 +25,7 @@ class UI(object):
     def read_menu(msg: str) -> int:
         while True:
             try:
-                choice = int(input(msg))
+                choice = int(input(msg).strip())
                 if 1 <= choice <= 9:
                     return choice
                 else:
@@ -36,7 +36,7 @@ class UI(object):
     @staticmethod
     def read_cpf_or_cnpj_value(msg: str) -> str:
         while True:
-            value = input(msg)
+            value = input(msg).strip()
             if (len(value) == 11 or len(value) == 14) and value.isdigit():
                 return value
             else:
@@ -46,7 +46,7 @@ class UI(object):
     def read_float_value(msg: str) -> float:
         while True:
             try:
-                value = float(input(msg).replace(',', '.'))
+                value = float(input(msg).strip().replace(',', '.'))
                 return value
             except ValueError:
                 print("Valor inválido. Por favor, digite um número.")
@@ -55,7 +55,7 @@ class UI(object):
     def read_yes_or_no_answer(msg: str) -> str:
         while True:
             try:
-                answer = input(msg).lower()[0]
+                answer = input(msg).strip().lower()[0]
                 if answer == "s" or answer == "n":
                     return answer
                 else:
