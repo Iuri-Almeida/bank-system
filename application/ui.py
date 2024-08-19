@@ -52,18 +52,6 @@ class UI(object):
                 print("Valor inválido. Por favor, digite um número.")
 
     @staticmethod
-    def read_yes_or_no_answer(msg: str) -> str:
-        while True:
-            try:
-                answer = input(msg).strip().lower()[0]
-                if answer == "s" or answer == "n":
-                    return answer
-                else:
-                    print("Resposta inválida. Por favor, responda 's' ou 'n'.")
-            except IndexError:
-                print("Resposta inválida. Por favor, responda 's' ou 'n'.")
-
-    @staticmethod
     def show_account_created(account: BankAccount) -> None:
         print(f"\nConta criada com sucesso!\n")
         print(account)
