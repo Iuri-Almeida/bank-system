@@ -27,7 +27,7 @@ def test_delete_account_with_nonzero_balance():
 
     account = bank.create_account("12345678900")
 
-    bank.deposit(account.id, 100)
+    bank.deposit(account, 100)
 
     with pytest.raises(BankException) as e:
         bank.delete_account(account.id)
@@ -55,8 +55,8 @@ def test_delete_account_after_successful_withdrawal():
 
     account = bank.create_account("12345678901")
 
-    bank.deposit(account.id, 100)
-    bank.withdraw(account.id, 100)
+    bank.deposit(account, 100)
+    bank.withdraw(account, 100)
 
     deleted_account = bank.delete_account(account.id)
 
@@ -70,14 +70,14 @@ def test_delete_account_after_multiple_transactions():
     account1 = bank.create_account("12345678901")
     account2 = bank.create_account("98765432109")
 
-    bank.deposit(account1.id, 1000)
-    bank.withdraw(account1.id, 500)
-    bank.transfer(account1.id, account2.id, 200)
+    bank.deposit(account1, 1000)
+    bank.withdraw(account1, 500)
+    bank.transfer(account1, account2, 200)
 
     assert bank.get_account(account1.id).balance == 300
     assert bank.get_account(account2.id).balance == 200
 
-    bank.withdraw(account1.id, 300)
+    bank.withdraw(account1, 300)
 
     deleted_account = bank.delete_account(account1.id)
 

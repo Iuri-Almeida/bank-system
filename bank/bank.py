@@ -37,26 +37,18 @@ class Bank(object):
         raise ValueError(f"Conta não encontrada para o CPF/CNPJ {id}.")
 
     def delete_account(self, id: str) -> BankAccount:
-        if id in self.__accounts:
-            if self.get_account(id).balance == 0:
-                return self.__accounts.pop(id)
+        if self.get_account(id).balance == 0:
+            return self.__accounts.pop(id)
 
-            raise BankException(f"Não é possível excluir a conta {id} com saldo não zero.")
+        raise BankException(f"Não é possível excluir a conta {id} com saldo não zero.")
 
-        raise ValueError(f"Conta não encontrada para o CPF/CNPJ {id}.")
-
-    def deposit(self, id: str, value: float) -> None:
-        account = self.get_account(id)
+    def deposit(self, account: BankAccount, value: float) -> None:
         account.deposit(value)
 
-    def withdraw(self, id: str, value: float) -> None:
-        account = self.get_account(id)
+    def withdraw(self, account: BankAccount, value: float) -> None:
         account.withdraw(value)
 
-    def transfer(self, from_id: str, to_id: str, value: float) -> None:
-        sender_account = self.get_account(from_id)
-        receiver_account = self.get_account(to_id)
-
+    def transfer(self, sender_account: BankAccount, receiver_account: BankAccount, value: float) -> None:
         sender_account.transfer(receiver_account, value)
 
     def __validate_id(self, id: object) -> None:
