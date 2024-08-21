@@ -90,11 +90,10 @@ def main():
                 break
 
         except (BankException, ValueError) as e:
-            print(e)
-            input('\nClick ENTER to continue.')
+            UI.show_error_message(e)
 
     UI.clear_screen()
-    print("Obrigado por utilizar nosso sistema. Até mais!")
+    UI.show_exit_message()
 
 
 if __name__ == "__main__":
